@@ -1,0 +1,202 @@
+<div class="container-fluid">
+  <div class="product-section">
+    <button class="btn btn-primary float-end m-3" (click)="openModal('addProductModal',{})">Add+</button>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>S.NO</th>
+          <th>ID</th>
+          <th>Product</th>
+          <th>Rate</th>
+          <th>Qnty</th>
+          <th style="text-align: center;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(item of productList;track item;let i= $index)
+        {
+        <tr>
+          <td>{{i+1}}</td>
+          <td>{{item.productId}}</td>
+          <td>{{item.productName}}</td>
+          <td>{{item.productPrice}}</td>
+          <td>{{item.productQnty}}</td>
+
+
+          <td style="text-align: center;">
+            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+              <button type="button" class="btn btn-success" (click)="openModal('updateProductModal',i)"><i
+                  class="bi bi-pencil-square"></i></button>
+              <button type="button" class="btn btn-danger" (click)="openModal('deleteModal',i)"><i
+                  class="bi bi-trash"></i></button>
+
+            </div>
+          </td>
+        </tr>
+        <button (click)="openModal('addProductModal',i)">Open</button>
+
+        }
+
+        @empty{
+        <p *ngIf="productList.length==0">Records Not Available</p>
+        }
+      </tbody>
+
+    </table>
+
+  </div>
+</div>
+
+<!-- Add PRODUCT -->
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+  open
+</button>
+
+
+<!-- Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Product</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Product Form -->
+        <form [formGroup]="productForm">
+          <div class="row">
+            <div class="col-xl-6">
+              <label for="productId" class="form-label">Product Id <sup>*</sup></label>
+              <input type="text" class="form-control form-control-lg w-100" id="productId"
+                placeholder="Enter Your Product Id mb-3" formControlName="productId">
+
+              <div
+                *ngIf="productForm.controls['productId'].hasError('required') && productForm.controls['productId'].touched "
+                class="text-danger">
+                Email is Required
+              </div>
+            </div>
+
+            <div class="col-xl-6">
+              <label for="productName" class="form-label">Product Name <sup>*</sup></label>
+              <input type="text" class="form-control form-control-lg w-100" id="productName"
+                placeholder="Enter Your Product Name mb-3" formControlName="productName">
+
+
+            </div>
+
+            <div class="col-xl-6">
+              <label for="productPrice" class="form-label">Product Price <sup>*</sup></label>
+              <input type="text" class="form-control form-control-lg w-100" id="productPrice"
+                placeholder="Enter Your Product Price mb-3" formControlName="productPrice">
+
+            </div>
+
+            <div class="col-xl-6">
+              <label for="productQnty" class="form-label">Product Qunatity <sup>*</sup></label>
+              <input type="text" class="form-control form-contformControlNamerol-lg w-100" id="productQnty"
+                placeholder="Enter Your Product Price mb-3" formControlName="productQnty">
+
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="closeModal('addProductModal')">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="submit()">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Delete Modal -->
+<!-- Button trigger modal -->
+<!-- <h1>Delete</h1>
+<button type="button" class="btn btn-primary" >
+  Launch Delete Modal
+</button> -->
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-danger" id="exampleModalLabel">Delete</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-danger">Confirm Delete Products</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" (click)="delete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Update MODAL -->
+
+<div class="modal fade" id="updateProductModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">update New Product</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Product Form -->
+        <form [formGroup]="productForm">
+          <div class="row">
+            <div class="col-xl-6">
+              <label for="productId" class="form-label">Product Id <sup>*</sup></label>
+              <input type="text" class="form-control form-control-lg w-100" id="productId"
+                placeholder="Enter Your Product Id mb-3" formControlName="productId">
+
+              <div
+                *ngIf="productForm.controls['productId'].hasError('required') && productForm.controls['productId'].touched "
+                class="text-danger">
+                Email is Required
+              </div>
+            </div>
+
+            <div class="col-xl-6">
+              <label for="productName" class="form-label">Product Name <sup>*</sup></label>
+              <input type="text" class="form-control form-control-lg w-100" id="productName"
+                placeholder="Enter Your Product Name mb-3" formControlName="productName">
+
+
+            </div>
+
+            <div class="col-xl-6">
+              <label for="productPrice" class="form-label">Product Price <sup>*</sup></label>
+              <input type="text" class="form-control form-control-lg w-100" id="productPrice"
+                placeholder="Enter Your Product Price mb-3" formControlName="productPrice">
+
+            </div>
+
+            <div class="col-xl-6">
+              <label for="productQnty" class="form-label">Product Qunatity <sup>*</sup></label>
+              <input type="text" class="form-control form-contformControlNamerol-lg w-100" id="productQnty"
+                placeholder="Enter Your Product Price mb-3" formControlName="productQnty">
+
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="closeModal('addProductModal')">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="update()">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>

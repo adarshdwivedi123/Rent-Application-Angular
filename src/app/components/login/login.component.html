@@ -1,0 +1,55 @@
+<div class="container-fluid login-section d-flex justify-content-center align-items-center">
+    <div class="card  login-card shadow-lg ">
+        <!-- card Header -->
+        <div class="card-header p-3 ">
+            Login
+
+        </div>
+
+        <!-- card body -->
+        <form [formGroup]="loginForm">
+            <div class="card-body">
+
+                <div class="row">
+                    <!--Email  -->
+                    <div class="col-xl-12">
+                        <label for="email" class="form-label">E-Mail</label>
+                        <input type="text" class="form-control" id="email" placeholder="example@gmail.com"
+                            formControlName="email" />
+                        <div *ngIf="loginForm.controls['email'].hasError('required') && loginForm.controls['email'].touched "
+                            class="text-danger">
+                            Email is Required
+                        </div>
+
+                    </div>
+                    <!-- Password -->
+                    <div class="col-xl-12 col-mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" formControlName="password" />
+                        <div *ngIf="loginForm.controls['password'].hasError('required') && loginForm.controls['password'].touched "
+                            class="text-danger">
+                            Password is Required
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </form>
+
+
+
+        <!-- card footer -->
+        <div class="card-footer">
+            <a routerLink="/register">click here to register</a>
+            <button class="btn btn-primary float-end" (click)="submit()"
+                [disabled]="!this.loginForm.valid">Login</button>
+        </div>
+
+
+
+    </div>
+
+</div>
